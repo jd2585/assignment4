@@ -1,0 +1,17 @@
+# Start from Fedora
+FROM fedora:latest
+
+# Update system and install ONLY httpd
+RUN dnf -y update && \
+    dnf -y install httpd && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+# Copy the local data folder (including myinfo.html) into the container
+COPY data /var/www/html/data
+
+# Expose port 80 for HTTP traffic
+EXPOSE 80
+
+# Make sure httpd runs when the container starts
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
